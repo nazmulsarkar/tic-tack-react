@@ -10,6 +10,7 @@ import ServerError from '../../features/errors/ServerError';
 import { useStore } from '../stores/store';
 import LoadingComponent from './LoadingComponent';
 import PlayPage from '../../features/game/pages/PlayPage';
+import HomePage from '../../features/home/HomePage';
 
 function App() {
   const { commonStore } = useStore();
@@ -23,7 +24,7 @@ function App() {
   return (
     <>
       <ToastContainer position='bottom-right' hideProgressBar />
-      <Route exact path='/' component={PlayPage} />
+      <Route exact path='/' component={HomePage} />
       <Route
         path={'/(.+)'}
         render={() => (
