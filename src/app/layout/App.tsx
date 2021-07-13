@@ -32,7 +32,7 @@ function App() {
             <NavBar />
             <Container style={{ marginTop: '7em' }}>
               <Switch>
-                <Route path='/play' component={PlayPage} />
+                <Route exact path='/play' component={PlayPage} />
                 <Route path='/errors' component={TestErrors} />
                 <Route path='/server-error' component={ServerError} />
                 <Route component={NotFound} />
