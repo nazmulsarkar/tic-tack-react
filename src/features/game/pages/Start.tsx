@@ -21,9 +21,11 @@ const Start = (props: Props) => {
   };
   return (
     <div>
-      <form onSubmit={handleSubmit} className='ui form'>
+      <form onSubmit={handleSubmit} className="ui form">
         <div className="field">
-          <label htmlFor="player1" className='ui label'>Player 1</label>
+          <label htmlFor="player1" className="ui label">
+            Player 1
+          </label>
           <input
             className=""
             type="text"
@@ -32,16 +34,22 @@ const Start = (props: Props) => {
           />
         </div>
         <div className="field">
-          <label htmlFor="player2" className='ui label'>Player 2</label>
+          <label htmlFor="player2" className="ui label">
+            Player 2
+          </label>
           <input
             type="text"
             value={players[1]}
             onInput={(e) => handleInput(e, 1)}
           />
         </div>
-          <button type="submit" className='ui primary basic button' disabled={!canStart}>
-            Start
-          </button>
+        <button
+          type="submit"
+          className="ui primary basic button"
+          disabled={!canStart}
+        >
+          Start
+        </button>
       </form>
     </div>
   );

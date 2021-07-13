@@ -9,7 +9,7 @@ const Game = (props: Props) => {
     board: {
       display: "grid",
       gridTemplateColumns: "repeat(3, 1fr)",
-      width: "300px",
+      width: "300px"
     },
   };
   return (

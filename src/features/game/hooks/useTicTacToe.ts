@@ -5,6 +5,7 @@ export interface GameStructure {
   board: string[];
   status: string;
   turn: string;
+  gameHistory: string[][];
   players: string[];
   winner: string | null;
 }
@@ -13,6 +14,9 @@ interface ReturnValue {
   board: string[];
   status: string;
   winner: string | null;
+  history: string[][];
+  players: string[];
+  resetGame: () => void;
   handleClick: (index: number) => void;
   handleRestart: () => void;
   handleStart: (players: string[]) => void;
@@ -30,6 +34,8 @@ export default function useTicTacToe(): ReturnValue {
   newGame.status = "created";
   newGame.turn = "X";
   newGame.players = ["One", "Two"];
+  newGame.winner = "";
+  newGame.gameHistory = [newGame.board];
 
   const [currentGame, setCurrentgame] = useLocalStorage(
     "currentGame",
@@ -41,6 +47,8 @@ export default function useTicTacToe(): ReturnValue {
   const [winner, setWinner] = useState<string | null>(null);
   const [status, setStatus] = useState(currentGame.status);
   const [players, setPlayers] = useState(currentGame.players);
+  const [stepNumber, setStepNumber] = useState(0);
+  const [history, setHistory] = useState(currentGame.gameHistory);
 
   const saveGame = useCallback(() => {
     const game = new GameStructure();
@@ -48,9 +56,10 @@ export default function useTicTacToe(): ReturnValue {
     game.status = status;
     game.turn = turn;
     game.players = players;
+    game.gameHistory = history;
     game.winner = winner;
     setCurrentgame(game);
-  }, [board, players, setCurrentgame, status, turn, winner]);
+  }, [board, players, history, setCurrentgame, status, turn, winner]);
 
   useEffect(() => {
     if (status !== "started") return;
@@ -96,14 +105,26 @@ export default function useTicTacToe(): ReturnValue {
     setBoard(newBoard);
     const newTurn = turn === "X" ? "O" : "X";
     setTurn(newTurn);
+
+    const timeInHistory = history.slice(0, stepNumber + 1);
+    setStepNumber(timeInHistory.length);
+    const current = timeInHistory[stepNumber];
+    const squares = [...current];
+    squares[index] = turn ? "X" : "O";
+    // if (index === 0) {
+    //   setHistory([squares]);
+    // } else {
+    setHistory([...timeInHistory, squares]);
+    // }
     saveGame();
   };
 
   const handleStart = (players: string[]) => {
+    setBoard(Array(9).fill(""));
     setPlayers(players);
     setTurn("X");
     setStatus("started");
-
+    setHistory([Array(9).fill(null)]);
     saveGame();
   };
 
@@ -111,8 +132,37 @@ export default function useTicTacToe(): ReturnValue {
     setBoard(Array(9).fill(""));
     setWinner("");
     setStatus("created");
+    setHistory([Array(9).fill(null)]);
     saveGame();
   };
 
-  return { board, status, winner, handleClick, handleRestart, handleStart };
+  const resetGame = () => {
+    setBoard(Array(9).fill(""));
+    setPlayers([]);
+    setTurn("X");
+    setStatus("created");
+    setWinner("");
+    setHistory([Array(9).fill(null)]);
+    const game = new GameStructure();
+    game.board = board;
+    game.status = status;
+    game.turn = turn;
+    game.players = players;
+    game.gameHistory = history;
+    game.winner = winner;
+    console.log(game);
+    setCurrentgame(game);
+  };
+
+  return {
+    board,
+    status,
+    winner,
+    history,
+    players,
+    resetGame,
+    handleClick,
+    handleRestart,
+    handleStart,
+  };
 }
